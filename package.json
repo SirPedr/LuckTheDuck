@@ -1,0 +1,14 @@
+{
+  "name": "LuckTheDuck",
+  "version": "1.0.0",
+  "description": "A usefol Discord bot that gives information about monsters in D&D 5e",
+  "main": "index.js",
+  "repository": "https://github.com/SirPedr/LuckTheDuck",
+  "author": "SirPedr <ppagbpedro@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "graphql": "^15.0.0",
+    "graphql-tools": "^5.0.0"
+  }
+}
