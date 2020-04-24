@@ -1,12 +1,3 @@
-import { graphql } from "graphql";
-import schema from "./schema/schema";
-import { MonsterQuery as source} from "./schema/queries/monster";
+import { getMonster } from "./libs/DnDInfo";
 
-
-const variableValues = {
-    "name": "adult-black-dragon"
-};
-
-graphql({ schema, source, variableValues}).then((response) => {
-    console.log(response);
-});
+getMonster("adult-black-dragon").then((response) => console.log(response));
