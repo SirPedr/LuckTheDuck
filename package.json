@@ -7,8 +7,16 @@
   "author": "SirPedr <ppagbpedro@gmail.com>",
   "license": "MIT",
   "private": false,
+  "type": "module",
   "dependencies": {
+    "esm": "^3.2.25",
     "graphql": "^15.0.0",
     "graphql-tools": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  },
+  "scripts": {
+    "justgo": "node -r esm src/index.js"
   }
 }
