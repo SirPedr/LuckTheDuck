@@ -60,7 +60,7 @@ const typeDefs = `
   }
 
   type Query {
-    monster: Monster
+    monster(name: String!): Monster
   }
 
   schema {

@@ -1,5 +1,4 @@
 const defaultMonster = {
-    name: "Tarrasque",
     size: "Huge",
     type: "Titan",
     armor_class: 25
@@ -7,7 +6,7 @@ const defaultMonster = {
 
 const resolvers = {
     Query: {
-        monster: () => (defaultMonster)
+        monster: (_, { name }) => ({name, ...defaultMonster})
     }
 };
 
