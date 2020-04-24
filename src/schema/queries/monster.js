@@ -4,6 +4,7 @@ export const MonsterQuery = `
       name
       type
       armor_class
+      dexterity
     }
   }
 `;
