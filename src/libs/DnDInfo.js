@@ -8,6 +8,6 @@ export const getMonster = (monsterName) => {
   };
 
   return graphql({ schema, source, variableValues }).then((response) =>
-    !response.errors ? response : Promise.reject("Monster not found!")
+    !response.errors ? response.data.monster : Promise.reject("Monster not found!")
   );
 };

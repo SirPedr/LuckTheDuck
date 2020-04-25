@@ -7,17 +7,18 @@
   "author": "SirPedr <ppagbpedro@gmail.com>",
   "license": "MIT",
   "private": false,
-  "type": "module",
   "dependencies": {
+    "discord.js": "^12.2.0",
     "esm": "^3.2.25",
     "graphql": "^15.0.0",
     "graphql-tools": "^5.0.0",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "eslint": "^6.8.0"
+    "eslint": "^6.8.0",
+    "nodemon": "^2.0.3"
   },
   "scripts": {
-    "justgo": "node -r esm src/index.js"
+    "start": "nodemon -r esm src/index.js"
   }
 }
