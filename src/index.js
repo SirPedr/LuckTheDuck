@@ -1,7 +1,9 @@
 import { Client, MessageEmbed } from "discord.js";
+import { getMonster } from "./libs/DnDInfo";
+import { parseMessage } from "./libs/discordMessages";
+
 import { BOT_TOKEN } from "./config/botPrivateConfig";
 import { BOT_PREFIX } from "./config/botConfig";
-import { getMonster } from "./libs/DnDInfo";
 
 const client = new Client();
 
@@ -11,16 +13,14 @@ client.on("ready", () => {
 
 client.on("message", async (message) => {
   if (!message.author.bot && message.content.startsWith(BOT_PREFIX)) {
-    const monsterRequestArgs = message.content.split(" ").slice(1);
+    const params = parseMessage(message.content);
 
-    const params = {
-      name: monsterRequestArgs[0]
-    };
-
+    // @TODO: Tratar caso de monstro não encontrado
     const monsterData = await getMonster(params.name);
 
     message.delete();
 
+    // @TODO: encapsular riação de mensagem com as informações
     const responseMessage = new MessageEmbed();
 
     responseMessage.setTitle(monsterData.name);
@@ -28,7 +28,9 @@ client.on("message", async (message) => {
     responseMessage.addField("Armor Class", monsterData.armor_class, true);
     responseMessage.addField("Dexterity", monsterData.dexterity, true);
 
-    message.channel.send(responseMessage);
+    const channel = params.isPrivate ? message.author : message.channel;
+
+    channel.send(responseMessage);
   }
 });
 
