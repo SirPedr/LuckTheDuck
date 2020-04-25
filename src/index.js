@@ -1,5 +1,6 @@
 import { Client, MessageEmbed } from "discord.js";
-import { BOT_TOKEN } from "./config/botConfig";
+import { BOT_TOKEN } from "./config/botPrivateConfig";
+import { BOT_PREFIX } from "./config/botConfig";
 import { getMonster } from "./libs/DnDInfo";
 
 const client = new Client();
@@ -9,8 +10,17 @@ client.on("ready", () => {
 });
 
 client.on("message", async (message) => {
-  if (!message.author.bot) {
-    const monsterData = await getMonster("adult-black-dragon");
+  if (!message.author.bot && message.content.startsWith(BOT_PREFIX)) {
+    const monsterRequestArgs = message.content.split(" ").slice(1);
+
+    const params = {
+      name: monsterRequestArgs[0]
+    };
+
+    const monsterData = await getMonster(params.name);
+
+    message.delete();
+
     const responseMessage = new MessageEmbed();
 
     responseMessage.setTitle(monsterData.name);

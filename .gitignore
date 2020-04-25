@@ -115,4 +115,4 @@ dist
 .pnp.*
 
 #bot tokens
-src/config/botConfig.js
+src/config/botPrivateConfig.js
