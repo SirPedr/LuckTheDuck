@@ -1,6 +1,6 @@
-import { Client, MessageEmbed } from "discord.js";
+import { Client } from "discord.js";
 import { getMonster } from "./libs/DnDInfo";
-import { parseMessage } from "./libs/discordMessages";
+import { parseMessage, formatMonsterDataIntoMessage } from "./libs/discordMessages";
 
 import { BOT_TOKEN } from "./config/botPrivateConfig";
 import { BOT_PREFIX } from "./config/botConfig";
@@ -20,13 +20,7 @@ client.on("message", async (message) => {
 
     message.delete();
 
-    // @TODO: encapsular riação de mensagem com as informações
-    const responseMessage = new MessageEmbed();
-
-    responseMessage.setTitle(monsterData.name);
-    responseMessage.addField("Type", monsterData.type, true);
-    responseMessage.addField("Armor Class", monsterData.armor_class, true);
-    responseMessage.addField("Dexterity", monsterData.dexterity, true);
+    const responseMessage = formatMonsterDataIntoMessage(monsterData);
 
     const channel = params.isPrivate ? message.author : message.channel;
 
