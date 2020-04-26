@@ -1,6 +1,9 @@
-import { Client } from "discord.js";
+import { Client, MessageEmbed } from "discord.js";
 import { getMonster } from "./libs/DnDInfo";
-import { parseMessage, formatMonsterDataIntoMessage } from "./libs/discordMessages";
+import {
+  getParamsFromCommand,
+  formatMonsterDataIntoMessage
+} from "./libs/discordMessages";
 
 import { BOT_TOKEN } from "./config/botPrivateConfig";
 import { BOT_PREFIX } from "./config/botConfig";
@@ -11,20 +14,25 @@ client.on("ready", () => {
   console.log("Luck the Duck is ready to roll!");
 });
 
-client.on("message", async (message) => {
+client.on("message", (message) => {
   if (!message.author.bot && message.content.startsWith(BOT_PREFIX)) {
-    const params = parseMessage(message.content);
-
-    // @TODO: Tratar caso de monstro não encontrado
-    const monsterData = await getMonster(params.name);
-
-    message.delete();
-
-    const responseMessage = formatMonsterDataIntoMessage(monsterData);
-
+    const params = getParamsFromCommand(message.content);
     const channel = params.isPrivate ? message.author : message.channel;
 
-    channel.send(responseMessage);
+    let responseMessage = new MessageEmbed();
+
+    getMonster(params.name)
+      .then((monster) => {
+        message.delete();
+
+        responseMessage = formatMonsterDataIntoMessage(monster);
+
+        channel.send(responseMessage);
+      })
+      .catch(() => {
+        responseMessage.setTitle(`Sorry, couldn't find such a monster...`);
+        channel.send(responseMessage);
+      });
   }
 });
 

@@ -7,7 +7,7 @@ const resolvers = {
       return fetch(`${BASE_API_URL}/${name}`)
         .then((response) => response.json())
         .then((apiResponse) => {
-          return !apiResponse.error
+          return !apiResponse.errors
             ? apiResponse
             : Promise.reject();
         });

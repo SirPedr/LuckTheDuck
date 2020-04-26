@@ -2,7 +2,7 @@ import { MessageEmbed } from "discord.js";
 import { MONSTER_NAME_REGEX, OPTIONS_REGEX } from "../config/regex";
 import { capitalize, normalizeField } from "./stringFormat";
 
-export const parseMessage = (messageContent) => {
+export const getParamsFromCommand = (messageContent) => {
   const normalizedMonsterName = messageContent
     .match(MONSTER_NAME_REGEX)
     .join("-")

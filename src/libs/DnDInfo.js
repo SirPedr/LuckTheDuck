@@ -7,7 +7,7 @@ export const getMonster = (monsterName) => {
     name: monsterName
   };
 
-  return graphql({ schema, source, variableValues }).then((response) =>
-    !response.errors ? response.data.monster : Promise.reject("Monster not found!")
-  );
+  return graphql({ schema, source, variableValues })
+    .then((response) => response.data.monster)
+    .catch((err) => err);
 };
