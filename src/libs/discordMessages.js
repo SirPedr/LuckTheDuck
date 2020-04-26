@@ -1,4 +1,4 @@
-import { MONSTER_NAME_REGEX } from "../config/regex";
+import { MONSTER_NAME_REGEX, OPTIONS_REGEX } from "../config/regex";
 
 export const parseMessage = (messageContent) => {
   const normalizedMonsterName = messageContent
@@ -6,11 +6,11 @@ export const parseMessage = (messageContent) => {
     .join("-")
     .toLowerCase();
 
-  /* @TODO: Verificar presença de parâmetros adicionais (ex: !private)
-   na mensagem e colocar no objeto "params" */
+  const additionalConfig = messageContent.match(OPTIONS_REGEX);
 
   const params = {
     name: normalizedMonsterName,
+    isPrivate: additionalConfig.includes("private")
   };
 
   return params;
