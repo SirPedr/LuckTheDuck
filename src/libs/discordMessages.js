@@ -1,5 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { MONSTER_NAME_REGEX, OPTIONS_REGEX } from "../config/regex";
+import { capitalize, normalizeField } from "./stringFormat";
 
 export const parseMessage = (messageContent) => {
   const normalizedMonsterName = messageContent
@@ -20,10 +21,17 @@ export const parseMessage = (messageContent) => {
 export const formatMonsterDataIntoMessage = (monster) => {
   const formatedMessage = new MessageEmbed();
 
-  formatedMessage.setTitle(monster.name);
-  formatedMessage.addField("Type", monster.type, true);
-  formatedMessage.addField("Armor Class", monster.armor_class, true);
-  formatedMessage.addField("Dexterity", monster.dexterity, true);
+  const { name, ...monsterInfo } = monster;
+
+  formatedMessage.setTitle(name);
+
+  for (let [key, value] of Object.entries(monsterInfo)) {
+    const fieldName = normalizeField(key);
+    const normalizedValue =
+      typeof value === "string" ? capitalize(value) : value;
+
+    formatedMessage.addField(fieldName, normalizedValue, true);
+  }
 
   return formatedMessage;
 };
