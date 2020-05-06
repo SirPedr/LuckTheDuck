@@ -20,6 +20,9 @@ export const MonsterQuery = `
         fly
         swim
       }
+      damage_vulnerabilities
+      damage_resistances
+      damage_immunities
     }
   }
 `;
