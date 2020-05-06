@@ -9,7 +9,7 @@ const resolvers = {
         .then((apiResponse) => {
           return !apiResponse.errors
             ? apiResponse
-            : Promise.reject();
+            : Promise.reject(apiResponse.errors);
         });
     }
   }

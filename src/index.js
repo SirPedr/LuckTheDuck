@@ -30,7 +30,7 @@ client.on("message", (message) => {
         channel.send(responseMessage);
       })
       .catch(() => {
-        responseMessage.setTitle(`Sorry, couldn't find such a monster...`);
+        responseMessage.setTitle("Sorry, couldn't find such a monster...");
         channel.send(responseMessage);
       });
   }
