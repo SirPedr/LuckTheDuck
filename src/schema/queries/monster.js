@@ -3,8 +3,23 @@ export const MonsterQuery = `
     monster(name: $name) {
       name
       type
+      size
+      alignment
       armor_class
+      strength
       dexterity
+      constitution
+      intelligence
+      wisdom
+      charisma
+      hit_points
+      hit_dice
+      languages
+      speed {
+        walk
+        fly
+        swim
+      }
     }
   }
 `;
