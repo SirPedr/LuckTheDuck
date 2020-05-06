@@ -7,7 +7,7 @@ import { isString } from "./stringFormat";
 
 import { singleLineProperties } from "../config/botConfig";
 
-const isValueValid = (value) => isString(value) ? value.length > 0 : !isNaN(value);
+const isValueValid = (value) => Array.isArray(value) || isString(value) ? value.length > 0 : !isNaN(value);
 
 export const getParamsFromCommand = (messageContent) => {
   const normalizedMonsterName = messageContent
@@ -35,7 +35,7 @@ export const formatMonsterDataIntoMessage = (monster) => {
   for (let [key, value] of Object.entries(monsterInfo)) {
 
     const [normalizedField, normalizedValue] = normalizeKeyValuePair(key, value);
-  
+    
     const shouldValueBeInline = !singleLineProperties.includes(key);
 
     if(isValueValid(normalizedValue)) {
