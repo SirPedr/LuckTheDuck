@@ -12,7 +12,7 @@ const isValueValid = (value) => Array.isArray(value) || isString(value) ? value.
 export const getParamsFromCommand = (messageContent) => {
   const normalizedMonsterName = messageContent
     .match(MONSTER_NAME_REGEX)
-    .join("-")
+    .join("+")
     .toLowerCase();
 
   const additionalConfig = messageContent.match(OPTIONS_REGEX);

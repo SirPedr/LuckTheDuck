@@ -19,9 +19,9 @@ const typeDefs = `
     wisdom: Int!
     charisma: Int!
     proficiencies: [Proficiency!]!
-    damage_vulnerabilities: [String!]!
-    damage_resistances: [String!]!
-    damage_immunities: [String!]!
+    damage_vulnerabilities: String!
+    damage_resistances: String!
+    damage_immunities: String!
     condition_immunities: [Condition!]!
     # TODO: Figure out a solution to 'senses' field
     languages: String!
