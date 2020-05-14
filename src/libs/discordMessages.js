@@ -3,11 +3,9 @@ import { MessageEmbed } from "discord.js";
 import { MONSTER_NAME_REGEX, OPTIONS_REGEX } from "../config/regex";
 
 import { normalizeKeyValuePair } from "./normalizer";
-import { isString } from "./stringFormat";
+import { isValueValid } from "./validate";
 
 import { singleLineProperties } from "../config/botConfig";
-
-const isValueValid = (value) => Array.isArray(value) || isString(value) ? value.length > 0 : !isNaN(value);
 
 export const getParamsFromCommand = (messageContent) => {
   const normalizedMonsterName = messageContent
