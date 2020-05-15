@@ -23,6 +23,10 @@ export const MonsterQuery = `
       damage_vulnerabilities
       damage_resistances
       damage_immunities
+      actions {
+        name
+        desc
+      }
     }
   }
 `;

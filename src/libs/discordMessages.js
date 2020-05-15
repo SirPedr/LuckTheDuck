@@ -7,7 +7,7 @@ import { isValueValid } from "./validate";
 
 import { singleLineProperties } from "../config/botConfig";
 
-export const getParamsFromCommand = (messageContent) => {
+export const getParamsFromCommand = messageContent => {
   const normalizedMonsterName = messageContent
     .match(MONSTER_NAME_REGEX)
     .join("+")
@@ -23,7 +23,7 @@ export const getParamsFromCommand = (messageContent) => {
   return params;
 };
 
-export const formatMonsterDataIntoMessage = (monster) => {
+export const formatMonsterDataIntoMessage = monster => {
   const formatedMessage = new MessageEmbed();
 
   const { name, ...monsterInfo } = monster;
@@ -31,14 +31,26 @@ export const formatMonsterDataIntoMessage = (monster) => {
   formatedMessage.setTitle(name);
 
   for (let [key, value] of Object.entries(monsterInfo)) {
+    const [normalizedField, normalizedValue] = normalizeKeyValuePair(
+      key,
+      value
+    );
 
-    const [normalizedField, normalizedValue] = normalizeKeyValuePair(key, value);
-    
     const shouldValueBeInline = !singleLineProperties.includes(key);
 
-    if(isValueValid(normalizedValue)) {
-      formatedMessage.addField(normalizedField, normalizedValue, shouldValueBeInline);
-    } 
+    if (isValueValid(normalizedValue)) {
+      if (Array.isArray(normalizedValue)) {
+        for (let [title, description] of normalizedValue) {
+          formatedMessage.addField(title, description, shouldValueBeInline);
+        }
+      } else {
+        formatedMessage.addField(
+          normalizedField,
+          normalizedValue,
+          shouldValueBeInline
+        );
+      }
+    }
   }
 
   return formatedMessage;

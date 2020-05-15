@@ -4,5 +4,6 @@ export const singleLineProperties = [
   "armor_class",
   "damage_resistances",
   "damage_vulnerabilities",
-  "damage_immunities"
+  "damage_immunities",
+  "actions"
 ];
