@@ -4,6 +4,7 @@ import { MONSTER_NAME_REGEX, OPTIONS_REGEX } from "../config/regex";
 
 import { normalizeKeyValuePair } from "./normalizer";
 import { isValueValid } from "./validate";
+import { getRandomColor } from "./randomColor";
 
 import { singleLineProperties } from "../config/botConfig";
 
@@ -29,6 +30,7 @@ export const formatMonsterDataIntoMessage = monster => {
   const { name, ...monsterInfo } = monster;
 
   formatedMessage.setTitle(name);
+  formatedMessage.setColor(getRandomColor());
 
   for (let [key, value] of Object.entries(monsterInfo)) {
     const [normalizedField, normalizedValue] = normalizeKeyValuePair(
