@@ -7,3 +7,12 @@ export const singleLineProperties = [
   "damage_immunities",
   "actions"
 ];
+
+export const attributeSlugs = [
+  "strength",
+  "dexterity",
+  "constitution",
+  "intelligence",
+  "wisdom",
+  "charisma"
+];

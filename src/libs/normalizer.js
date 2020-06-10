@@ -1,4 +1,5 @@
 import { isString, capitalize } from "./stringFormat";
+import { attributeSlugs } from "../config/botConfig";
 
 const normalizeSpeed = speed => {
   return `Walk: ${speed.walk}${speed.fly ? ` | Fly: ${speed.fly}` : ""}${
@@ -14,6 +15,12 @@ const normalizeActions = actions => {
   }
 
   return normalizedActions;
+};
+
+const normalizeAttribute = attributeValue => {
+  const modifier = Math.floor((attributeValue - 10) / 2);
+
+  return `${attributeValue} (${modifier > 0 ? "+" : ""}${modifier})`;
 };
 
 const normalizeField = field =>
@@ -36,10 +43,15 @@ const propertyHandler = {
 };
 
 export const normalizeKeyValuePair = (key, value) => {
-  const customNormalizer = propertyHandler[key];
+  let customValueNormalizer = propertyHandler[key];
+
+  if (attributeSlugs.includes(key)) {
+    customValueNormalizer = normalizeAttribute;
+  }
 
   return [
     normalizeField(key),
-    (customNormalizer && customNormalizer(value)) || normalizeValue(value)
+    (customValueNormalizer && customValueNormalizer(value)) ||
+      normalizeValue(value)
   ];
 };
