@@ -4,6 +4,7 @@ import { makeExecutableSchema } from "graphql-tools";
 const typeDefs = `
   type Monster {
     name: String!
+    slug: String!
     size: String!
     type: String
     subtype: String

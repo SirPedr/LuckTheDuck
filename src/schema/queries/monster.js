@@ -2,6 +2,7 @@ export const MonsterQuery = `
   query GetMonster($name: String!) {
     monster(name: $name) {
       name
+      slug
       type
       size
       alignment

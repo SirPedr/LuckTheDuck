@@ -8,8 +8,10 @@ export const getMonster = monsterName => {
   };
 
   return graphql({ schema, source, variableValues })
-    .then(response =>
-      !response.errors ? response.data.monster : Promise.reject(response.errors)
-    )
+    .then(response => {
+      return !response.errors
+        ? response.data.monster
+        : Promise.reject(response.errors);
+    })
     .catch(err => err);
 };

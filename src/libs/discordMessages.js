@@ -7,6 +7,7 @@ import { isValueValid } from "./validate";
 import { getRandomColor } from "./randomColor";
 
 import { singleLineProperties } from "../config/botConfig";
+import { BASE_MORE_INFO_URL } from "../config/generalConfig";
 
 export const getParamsFromCommand = messageContent => {
   const normalizedMonsterName = messageContent
@@ -27,10 +28,12 @@ export const getParamsFromCommand = messageContent => {
 export const formatMonsterDataIntoMessage = monster => {
   const formatedMessage = new MessageEmbed();
 
-  const { name, ...monsterInfo } = monster;
+  const { name, slug, ...monsterInfo } = monster;
 
-  formatedMessage.setTitle(name);
-  formatedMessage.setColor(getRandomColor());
+  formatedMessage
+    .setTitle(name)
+    .setColor(getRandomColor())
+    .setURL(`${BASE_MORE_INFO_URL}${slug}`);
 
   for (let [key, value] of Object.entries(monsterInfo)) {
     const [normalizedField, normalizedValue] = normalizeKeyValuePair(

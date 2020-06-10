@@ -14,7 +14,7 @@ client.on("ready", () => {
   console.log("Luck the Duck is ready to roll!");
 });
 
-client.on("message", (message) => {
+client.on("message", message => {
   if (!message.author.bot && message.content.startsWith(BOT_PREFIX)) {
     const params = getParamsFromCommand(message.content);
     const channel = params.isPrivate ? message.author : message.channel;
@@ -22,14 +22,15 @@ client.on("message", (message) => {
     let responseMessage = new MessageEmbed();
 
     getMonster(params.name)
-      .then((monster) => {
+      .then(monster => {
         message.delete();
 
         responseMessage = formatMonsterDataIntoMessage(monster);
 
         channel.send(responseMessage);
       })
-      .catch(() => {
+      .catch(err => {
+        console.log(err);
         responseMessage.setTitle("Sorry, couldn't find such a monster...");
         channel.send(responseMessage);
       });
