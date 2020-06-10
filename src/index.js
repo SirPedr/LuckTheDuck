@@ -3,7 +3,7 @@ import { getMonster } from "./libs/DnDInfo";
 import {
   getParamsFromCommand,
   formatMonsterDataIntoMessage
-} from "./libs/discordMessages";
+} from "./libs/messages";
 
 import { BOT_TOKEN } from "./config/botPrivateConfig";
 import { BOT_PREFIX } from "./config/botConfig";
@@ -26,14 +26,12 @@ client.on("message", message => {
         message.delete();
 
         responseMessage = formatMonsterDataIntoMessage(monster);
-
-        channel.send(responseMessage);
       })
       .catch(err => {
         console.log(err);
         responseMessage.setTitle("Sorry, couldn't find such a monster...");
-        channel.send(responseMessage);
-      });
+      })
+      .finally(() => channel.send(responseMessage));
   }
 });
 

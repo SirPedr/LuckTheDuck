@@ -1,4 +1,4 @@
-import { isString, capitalize } from "./stringFormat";
+import { isString, capitalize } from "./string";
 import { attributeSlugs } from "../config/botConfig";
 
 const normalizeSpeed = speed => {

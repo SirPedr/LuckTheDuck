@@ -1,4 +1,4 @@
-import resolvers from "../schema/resolvers";
+import resolvers from "./resolvers";
 import { makeExecutableSchema } from "graphql-tools";
 
 const typeDefs = `
