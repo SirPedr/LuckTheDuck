@@ -60,8 +60,14 @@ const typeDefs = `
     desc: String!
   }
 
+  type MonsterResults {
+    count: Int!
+    results: [Monster!]!
+  }
+
   type Query {
     monster(name: String!): Monster
+    availableMonsters(name: String!): MonsterResults
   }
 
   schema {
