@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, Message } from "discord.js";
 
 import { MONSTER_NAME_REGEX, OPTIONS_REGEX } from "../config/regex";
 
@@ -9,7 +9,7 @@ import { getRandomColor } from "./randomColor";
 import { singleLineProperties } from "../config/botConfig";
 import { BASE_MORE_INFO_URL } from "../config/generalConfig";
 
-export const getParamsFromCommand = messageContent => {
+export const getParamsFromCommand = (messageContent) => {
   const normalizedMonsterName = messageContent
     .match(MONSTER_NAME_REGEX)
     .join("+")
@@ -19,13 +19,13 @@ export const getParamsFromCommand = messageContent => {
 
   const params = {
     name: normalizedMonsterName,
-    isPrivate: additionalConfig.includes("private")
+    isPrivate: additionalConfig.includes("private"),
   };
 
   return params;
 };
 
-export const formatMonsterDataIntoMessage = monster => {
+export const formatMonsterDataIntoMessage = (monster) => {
   const formatedMessage = new MessageEmbed();
 
   const { name, slug, ...monsterInfo } = monster;
@@ -59,4 +59,22 @@ export const formatMonsterDataIntoMessage = monster => {
   }
 
   return formatedMessage;
+};
+
+export const createOptionsList = (options) => {
+  if (options.length) {
+    const optionsListMessage = new MessageEmbed();
+
+    optionsListMessage.setTitle(
+      "Found many entries in my books. Wich one do you want? (Type the number)"
+    );
+
+    const optionsListContent = options
+      .map((option, index) => `**${index + 1})** ${option}`)
+      .join("\n");
+
+    optionsListMessage.setDescription(optionsListContent);
+
+    return optionsListMessage;
+  }
 };

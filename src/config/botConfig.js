@@ -16,3 +16,9 @@ export const attributeSlugs = [
   "wisdom",
   "charisma"
 ];
+
+export const AWAIT_MESSAGE_DEFAULT_OPTIONS = {
+  max: 1,
+  time: 150000,
+  errors: ["time"]
+};
