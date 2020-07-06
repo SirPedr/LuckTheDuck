@@ -9,6 +9,7 @@
   "private": false,
   "dependencies": {
     "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "graphql": "^15.0.0",
     "graphql-tools": "^5.0.0",
@@ -19,7 +20,7 @@
     "nodemon": "^2.0.3"
   },
   "scripts": {
-    "start-dev": "node -r esm src/index.js",
-    "start": "nodemon -r esm src/index.js"
+    "start-dev": "nodemon -r dotenv/config -r esm src/index.js",
+    "start": "node -r dotenv/config -r esm src/index.js"
   }
 }

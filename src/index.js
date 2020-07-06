@@ -6,7 +6,6 @@ import {
   createOptionsList,
 } from "./libs/messages";
 
-import { BOT_TOKEN } from "./config/botPrivateConfig";
 import { BOT_PREFIX, AWAIT_MESSAGE_DEFAULT_OPTIONS } from "./config/botConfig";
 
 const client = new Client();
@@ -70,4 +69,4 @@ client.on("message", async (message) => {
   }
 });
 
-client.login(BOT_TOKEN);
+client.login(process.env.BOT_TOKEN);
