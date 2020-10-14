@@ -1,10 +1,14 @@
 import { Client, MessageEmbed } from "discord.js";
+
 import { getMonster, getAvailableMonsters } from "./libs/monsters";
 import {
   getParamsFromCommand,
-  formatMonsterDataIntoMessage,
   createOptionsList,
-} from "./libs/messages";
+} from "./libs/messages/messagesUtil";
+import {
+  formatMonsterDataIntoMessage,
+  handleMonsterSelection,
+} from "./libs/messages/monsterMessages";
 
 import { BOT_PREFIX, AWAIT_MESSAGE_DEFAULT_OPTIONS } from "./config/botConfig";
 
@@ -38,25 +42,8 @@ client.on("message", async (message) => {
 
       await channel.send(responseMessage);
 
-      const optionSelectionHandler = async (response) => {
-        if (
-          !isNaN(response.content) &&
-          response.content >= 0 &&
-          response.content <= availableMonsters.length
-        ) {
-          const selectedMonster = await getMonster(
-            availableMonsters[response.content - 1]
-          );
-
-          const monsterDataMessage = formatMonsterDataIntoMessage(
-            selectedMonster
-          );
-          channel.send(monsterDataMessage);
-        }
-      };
-
       channel.awaitMessages(
-        optionSelectionHandler,
+        (response) => handleMonsterSelection(response, availableMonsters),
         AWAIT_MESSAGE_DEFAULT_OPTIONS
       );
     } else {
