@@ -44,16 +44,13 @@ export const formatMonsterDataIntoMessage = (monster) => {
   return formatedMessage;
 };
 
-export const handleMonsterSelection = async (response, monsterList) => {
-  if (
-    !isNaN(response.content) &&
-    response.content >= 0 &&
-    response.content <= monsterList.length
-  ) {
-    const selectedMonster = await getMonster(monsterList[response.content - 1]);
+export const getMonsterBasedOnMonsterSelection = async (
+  selectedIndex,
+  monsterList
+) => {
+  const monsterName = monsterList[selectedIndex - 1];
 
-    const monsterDataMessage = formatMonsterDataIntoMessage(selectedMonster);
+  const selectedMonster = await getMonster(monsterName);
 
-    return monsterDataMessage;
-  }
+  return selectedMonster;
 };

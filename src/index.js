@@ -1,13 +1,15 @@
 import { Client, MessageEmbed } from "discord.js";
 
 import { getMonster, getAvailableMonsters } from "./libs/monsters";
+
 import {
   getParamsFromCommand,
   createOptionsList,
 } from "./libs/messages/messagesUtil";
+
 import {
   formatMonsterDataIntoMessage,
-  handleMonsterSelection,
+  getMonsterBasedOnMonsterSelection,
 } from "./libs/messages/monsterMessages";
 
 import { BOT_PREFIX, AWAIT_MESSAGE_DEFAULT_OPTIONS } from "./config/botConfig";
@@ -25,8 +27,6 @@ client.on("message", async (message) => {
 
     let responseMessage = new MessageEmbed();
 
-    message.delete();
-
     const availableMonsters = (
       await getAvailableMonsters(params.name)
     ).results.map((monster) => monster.name);
@@ -40,12 +40,36 @@ client.on("message", async (message) => {
     } else if (availableMonsters.length > 1) {
       responseMessage = createOptionsList(availableMonsters);
 
-      await channel.send(responseMessage);
+      const privateSendedMessage = await channel.send(responseMessage);
 
-      channel.awaitMessages(
-        (response) => handleMonsterSelection(response, availableMonsters),
-        AWAIT_MESSAGE_DEFAULT_OPTIONS
-      );
+      privateSendedMessage.channel
+        .awaitMessages(({ content }) => {
+          const parsedResponse = parseInt(content);
+
+          return (
+            typeof parsedResponse === "number" &&
+            parsedResponse > 0 &&
+            parsedResponse <= availableMonsters.length
+          );
+        }, AWAIT_MESSAGE_DEFAULT_OPTIONS)
+        .then((collectedAnswers) => {
+          const [{ content, channel }] = collectedAnswers.values();
+          const parsedUserResponse = parseInt(content);
+
+          getMonsterBasedOnMonsterSelection(
+            parsedUserResponse,
+            availableMonsters
+          )
+            .then((monster) => {
+              const monsterDataMessage = formatMonsterDataIntoMessage(monster);
+
+              channel.send(monsterDataMessage);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((error) => console.error(error));
     } else {
       responseMessage.setTitle(
         `Sorry, couldn't find an entry for ${params.name}.`

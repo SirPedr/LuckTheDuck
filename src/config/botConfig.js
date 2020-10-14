@@ -19,6 +19,6 @@ export const attributeSlugs = [
 
 export const AWAIT_MESSAGE_DEFAULT_OPTIONS = {
   max: 1,
-  time: 150000,
+  time: 60000,
   errors: ["time"]
 };
