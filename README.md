@@ -31,6 +31,7 @@ Right now Luck has only one command:
 - `!luck [monsterName]`: Gives details about a monster named `monsterName`.
   - If the search returns more than one result, Luck will give you a list of options instead. Just type the number associated to the
   monster you want.
+  - If monsterName is empty, Luck will give you a list of options too, but with all availables monsters in alphabetical order.
 
 ## Additional Options
 - `!private`: Return monster details in private. You know, so the players can't see what will fight them.
