@@ -13,6 +13,19 @@ have a lot of information, so that's why I'm here!
 Once the bot is up and running, it will try to respond to any messages that starts with `!luck`. Right now he'll do nothing if
 can't match any command.
 
+# Running Locally
+In order to run Luck, the Duck in dev environment, you need to do the following:
+  - Clone the repo, run `yarn`
+  - Create an Application in [Discord Developer Portal](https://discord.com/developers/applications). 
+  - Go to `OAuth2` menu, then scroll down to the bottom of page, in `Scopes`. Select the `bot` option and copy the URL Discord gives you.
+  - Replace `permissions=0` with `permissions=26624`. This will grant the bot permission to send messages in public and private channels.
+  - Paste this URL in your browser and add your Luck clone to a server.
+  - In your application, clcik "Bot" then in `Token` label click `Click to Reveal Token`. Copy it.
+  - Create a `.env` file in repo root then paste: `BOT_TOKEN=Your_Token_Here`
+  - Run `yarn start-dev`
+
+ At this point your Luck clone should be up and running just fine. Yay!
+
 ## Commands
 Right now Luck has only one command:
 - `!luck [monsterName]`: Gives details about a monster named `monsterName`.
