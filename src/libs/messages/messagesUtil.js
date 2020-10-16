@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 
-import { MONSTER_NAME_REGEX, OPTIONS_REGEX } from "../../config/regex";
+import { MONSTER_NAME_REGEX, OPTIONS_REGEX, MONSTER_PROPERTIES_REGEX } from "../../config/regex";
 
 export const getParamsFromCommand = (messageContent) => {
   const normalizedMonsterName = messageContent
@@ -36,3 +36,8 @@ export const createOptionsList = (options) => {
   }
 };
 
+export const getSelectedProperties = (message) => {
+  const properties = message.match(MONSTER_PROPERTIES_REGEX) || [];
+
+  return properties.map(prop => prop.trim().replace(" ", "_").toLowerCase());
+}

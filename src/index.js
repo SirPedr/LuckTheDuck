@@ -5,6 +5,7 @@ import { getMonster, getAvailableMonsters } from "./libs/monsters";
 import {
   getParamsFromCommand,
   createOptionsList,
+  getSelectedProperties
 } from "./libs/messages/messagesUtil";
 
 import {
@@ -29,10 +30,12 @@ client.on("message", async (message) => {
     const availableMonsters = availableMonstersRequest && availableMonstersRequest.results.map((monster) => monster.name);
 
     if (availableMonsters) {
+      const properties = getSelectedProperties(message.content);
+
       if (availableMonsters.length === 1) {
         const selectedMonster = await getMonster(availableMonsters[0]);
 
-        const responseMessage = formatMonsterDataIntoMessage(selectedMonster);
+        const responseMessage = formatMonsterDataIntoMessage(selectedMonster, properties);
         channel.send(responseMessage);
       } else if (availableMonsters.length > 1) {
         const responseMessage = createOptionsList(availableMonsters);
@@ -58,7 +61,7 @@ client.on("message", async (message) => {
               availableMonsters
             )
               .then((monster) => {
-                const monsterDataMessage = formatMonsterDataIntoMessage(monster);
+                const monsterDataMessage = formatMonsterDataIntoMessage(monster, properties);
 
                 channel.send(monsterDataMessage);
               })

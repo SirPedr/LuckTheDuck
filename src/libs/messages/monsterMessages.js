@@ -8,21 +8,27 @@ import { getMonster } from "../monsters";
 import { singleLineProperties } from "../../config/botConfig";
 import { BASE_MORE_INFO_URL } from "../../config/generalConfig";
 
-export const formatMonsterDataIntoMessage = (monster) => {
-  const formatedMessage = new MessageEmbed();
-
+export const formatMonsterDataIntoMessage = (monster, selectedProperties = []) => {
   const { name, slug, ...monsterInfo } = monster;
 
-  formatedMessage
-    .setTitle(name)
-    .setColor(getRandomColor())
-    .setURL(`${BASE_MORE_INFO_URL}${slug}`);
+  const formatedMessage = new MessageEmbed({
+    title: name,
+    color: getRandomColor(),
+    url: `${BASE_MORE_INFO_URL}${slug}`,
+  });
+
+  const monsterInfoEntries = Object.entries(monsterInfo);
+  const hasValidSelectedProperties = monsterInfoEntries.some(([key]) => selectedProperties.indexOf(key) >= 0);
 
   for (let [key, value] of Object.entries(monsterInfo)) {
     const [normalizedField, normalizedValue] = normalizeKeyValuePair(
       key,
       value
     );
+
+    if (hasValidSelectedProperties && (selectedProperties.indexOf(key) < 0)) {
+      continue;
+    }
 
     const shouldValueBeInline = !singleLineProperties.includes(key);
 
