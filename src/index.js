@@ -25,56 +25,51 @@ client.on("message", async (message) => {
     const params = getParamsFromCommand(message.content);
     const channel = params.isPrivate ? message.author : message.channel;
 
-    let responseMessage = new MessageEmbed();
+    const availableMonstersRequest = await getAvailableMonsters(params.name);
+    const availableMonsters = availableMonstersRequest && availableMonstersRequest.results.map((monster) => monster.name);
 
-    const availableMonsters = (
-      await getAvailableMonsters(params.name)
-    ).results.map((monster) => monster.name);
+    if (availableMonsters) {
+      if (availableMonsters.length === 1) {
+        const selectedMonster = await getMonster(availableMonsters[0]);
 
-    if (availableMonsters.length === 1) {
-      const selectedMonster = await getMonster(availableMonsters[0]);
+        const responseMessage = formatMonsterDataIntoMessage(selectedMonster);
+        channel.send(responseMessage);
+      } else if (availableMonsters.length > 1) {
+        const responseMessage = createOptionsList(availableMonsters);
 
-      responseMessage = formatMonsterDataIntoMessage(selectedMonster);
+        const privateSendedMessage = await channel.send(responseMessage);
 
-      channel.send(responseMessage);
-    } else if (availableMonsters.length > 1) {
-      responseMessage = createOptionsList(availableMonsters);
+        privateSendedMessage.channel
+          .awaitMessages(({ content }) => {
+            const parsedResponse = parseInt(content);
 
-      const privateSendedMessage = await channel.send(responseMessage);
+            return (
+              typeof parsedResponse === "number" &&
+              parsedResponse > 0 &&
+              parsedResponse <= availableMonsters.length
+            );
+          }, AWAIT_MESSAGE_DEFAULT_OPTIONS)
+          .then((collectedAnswers) => {
+            const [{ content, channel }] = collectedAnswers.values();
+            const parsedUserResponse = parseInt(content);
 
-      privateSendedMessage.channel
-        .awaitMessages(({ content }) => {
-          const parsedResponse = parseInt(content);
+            getMonsterBasedOnMonsterSelection(
+              parsedUserResponse,
+              availableMonsters
+            )
+              .then((monster) => {
+                const monsterDataMessage = formatMonsterDataIntoMessage(monster);
 
-          return (
-            typeof parsedResponse === "number" &&
-            parsedResponse > 0 &&
-            parsedResponse <= availableMonsters.length
-          );
-        }, AWAIT_MESSAGE_DEFAULT_OPTIONS)
-        .then((collectedAnswers) => {
-          const [{ content, channel }] = collectedAnswers.values();
-          const parsedUserResponse = parseInt(content);
-
-          getMonsterBasedOnMonsterSelection(
-            parsedUserResponse,
-            availableMonsters
-          )
-            .then((monster) => {
-              const monsterDataMessage = formatMonsterDataIntoMessage(monster);
-
-              channel.send(monsterDataMessage);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch((error) => console.error(error));
+                channel.send(monsterDataMessage);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((error) => console.error(error));
+      }
     } else {
-      responseMessage.setTitle(
-        `Sorry, couldn't find an entry for ${params.name}.`
-      );
-
+      const responseMessage = new MessageEmbed({title: `Sorry, couldn't find an entry for ${params.name}.`});
       channel.send(responseMessage);
     }
   }
