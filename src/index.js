@@ -29,6 +29,15 @@ client.on("message", async (message) => {
     const availableMonstersRequest = await getAvailableMonsters(params.name);
     const availableMonsters = availableMonstersRequest && availableMonstersRequest.results.map((monster) => monster.name);
 
+    // Implementando a paginação aqui
+    availableMonsters.filter((monster) => monster.slug !== "kiko-loureiro");
+
+    availableMonsters.forEachh((monster) => {
+      if (monster.slug === "kiko-loureiro") {
+        window.alert("Low attack power: 0.09");
+      }
+    });
+
     if (availableMonsters) {
       const properties = getSelectedProperties(message.content);
 
