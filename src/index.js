@@ -1,19 +1,12 @@
 import { Client, MessageEmbed } from "discord.js";
-
-import { getMonster, getAvailableMonsters } from "./libs/monsters";
-
+import { AWAIT_MESSAGE_DEFAULT_OPTIONS, BOT_PREFIX } from "./config/botConfig";
+import { EndpointBasedOnCategory } from "./consts/endpoints";
+import { getFromAPI } from "./libs/api";
 import {
-  getParamsFromCommand,
   createOptionsList,
-  getSelectedProperties
-} from "./libs/messages/messagesUtil";
-
-import {
-  formatMonsterDataIntoMessage,
-  getMonsterBasedOnMonsterSelection,
-} from "./libs/messages/monsterMessages";
-
-import { BOT_PREFIX, AWAIT_MESSAGE_DEFAULT_OPTIONS } from "./config/botConfig";
+  formatDataIntoMessage,
+  getParamsFromCommand,
+} from "./libs/util/messages";
 
 const client = new Client();
 
@@ -24,58 +17,54 @@ client.on("ready", () => {
 client.on("message", async (message) => {
   if (!message.author.bot && message.content.startsWith(BOT_PREFIX)) {
     const params = getParamsFromCommand(message.content);
+
     const channel = params.isPrivate ? message.author : message.channel;
+    const queryEndpoint = EndpointBasedOnCategory[params.category];
+    const queryData = await getFromAPI(queryEndpoint, params.options);
 
-    const availableMonstersRequest = await getAvailableMonsters(params.name);
-    const availableMonsters = availableMonstersRequest && availableMonstersRequest.results.map((monster) => monster.name);
+    let formatedMessage;
 
-    if (availableMonsters) {
-      const properties = getSelectedProperties(message.content);
+    if (queryData.length > 1) {
+      formatedMessage = createOptionsList(
+        queryData.map((result) => result.name)
+      );
 
-      if (availableMonsters.length === 1) {
-        const selectedMonster = await getMonster(availableMonsters[0]);
+      const optionsMessage = await channel.send(formatedMessage);
 
-        const responseMessage = formatMonsterDataIntoMessage(selectedMonster, properties);
-        channel.send(responseMessage);
-      } else if (availableMonsters.length > 1) {
-        const responseMessage = createOptionsList(availableMonsters);
+      optionsMessage.channel
+        .awaitMessages(({ content }) => {
+          const parsedResponse = parseInt(content);
 
-        const privateSendedMessage = await channel.send(responseMessage);
+          return (
+            !isNaN(parsedResponse) &&
+            parsedResponse >= 0 &&
+            parsedResponse <= queryData.length
+          );
+        }, AWAIT_MESSAGE_DEFAULT_OPTIONS)
+        .then((collectedAnswer) => {
+          const [{ content, channel }] = collectedAnswer.values();
+          const selectedItemIndex = parseInt(content) - 1;
 
-        privateSendedMessage.channel
-          .awaitMessages(({ content }) => {
-            const parsedResponse = parseInt(content);
+          const requestedItem = queryData[selectedItemIndex];
+          const message = formatDataIntoMessage(
+            requestedItem,
+            params.properties
+          );
 
-            return (
-              typeof parsedResponse === "number" &&
-              parsedResponse > 0 &&
-              parsedResponse <= availableMonsters.length
-            );
-          }, AWAIT_MESSAGE_DEFAULT_OPTIONS)
-          .then((collectedAnswers) => {
-            const [{ content, channel }] = collectedAnswers.values();
-            const parsedUserResponse = parseInt(content);
+          channel.send(message);
+        });
+    } else if (queryData.length === 1) {
+      formatedMessage = formatDataIntoMessage(queryData[0], params.properties);
 
-            getMonsterBasedOnMonsterSelection(
-              parsedUserResponse,
-              availableMonsters
-            )
-              .then((monster) => {
-                const monsterDataMessage = formatMonsterDataIntoMessage(monster, properties);
-
-                channel.send(monsterDataMessage);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          })
-          .catch((error) => console.error(error));
-      }
+      channel.send(formatedMessage);
     } else {
-      const responseMessage = new MessageEmbed({title: `Sorry, couldn't find an entry for ${params.name}.`});
-      channel.send(responseMessage);
+      formatedMessage = new MessageEmbed({
+        title: `Sorry, couldn't find an entry for ${params.options.search}.`,
+      });
+
+      channel.send(formatedMessage);
     }
   }
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login("NzY2NjQyMDA3NDEzNjIwNzY4.X4mVAg.H2eHo8FS8X_9Ly4V5tpQhdnQgjc");
