@@ -48,13 +48,14 @@ client.on("message", async (message) => {
           const requestedItem = queryData[selectedItemIndex];
           const message = formatDataIntoMessage(
             requestedItem,
+            params.category,
             params.properties
           );
 
           channel.send(message);
         });
     } else if (queryData.length === 1) {
-      formatedMessage = formatDataIntoMessage(queryData[0], params.properties);
+      formatedMessage = formatDataIntoMessage(queryData[0], params.category, params.properties);
 
       channel.send(formatedMessage);
     } else {

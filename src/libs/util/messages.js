@@ -6,6 +6,7 @@ import {
   SEARCH_PROPERTIES_REGEX,
   SEARCH_QUERY_REGEX,
 } from "../../config/regex";
+import { FieldsToDisplayBasedOnQueryType } from "../../consts/fieldsToDisplay";
 import { normalizeKeyValuePair } from "../normalizer";
 import { getRandomColor } from "../randomColor";
 import { isValueValid } from "../validate";
@@ -51,10 +52,12 @@ export const createOptionsList = (options) => {
 
 export const formatDataIntoMessage = (
   data,
+  category,
   selectedProperties,
   externalUrl
 ) => {
   const { name, ...infoToBeDisplayed } = data;
+  const fieldsToDisplay = FieldsToDisplayBasedOnQueryType[category];
 
   const formatedMessage = new MessageEmbed({
     title: name,
@@ -62,11 +65,20 @@ export const formatDataIntoMessage = (
     ...(externalUrl ? { url: externalUrl } : {}),
   });
 
-  const entriesToDisplay = !selectedProperties.length
-    ? Object.entries(infoToBeDisplayed)
-    : Object.entries(infoToBeDisplayed).filter(
+  const filteredInfo = Object.entries(infoToBeDisplayed).filter(([entryKey]) =>
+    fieldsToDisplay.includes(entryKey)
+  );
+
+  const entriesToDisplay = (!selectedProperties.length
+    ? filteredInfo
+    : filteredInfo.filter(
         ([propertyKey]) => selectedProperties.indexOf(propertyKey) >= 0
-      );
+      )
+  ).sort(
+    ([firstEntryKey], [secondEntryKey]) =>
+      fieldsToDisplay.indexOf(firstEntryKey) -
+      fieldsToDisplay.indexOf(secondEntryKey)
+  );
 
   for (let [key, value] of entriesToDisplay) {
     const [normalizedField, normalizedValue] = normalizeKeyValuePair(

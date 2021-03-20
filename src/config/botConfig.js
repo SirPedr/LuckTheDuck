@@ -5,7 +5,9 @@ export const singleLineProperties = [
   "damage_resistances",
   "damage_vulnerabilities",
   "damage_immunities",
-  "actions"
+  "actions",
+  "desc",
+  "higher_level"
 ];
 
 export const attributeSlugs = [
