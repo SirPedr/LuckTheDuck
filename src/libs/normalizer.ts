@@ -11,7 +11,7 @@ const normalizeSpeed = (speed: SpeedType) => {
 const normalizeActions = (actions: ActionType[]) => {
   const normalizedActions = [];
 
-  for (let action of actions) {
+  for (const action of actions) {
     normalizedActions.push([action.name, action.desc]);
   }
 
@@ -27,7 +27,7 @@ const normalizeAttribute = (attributeValue: number) => {
 const normalizeFieldName = (field: string) =>
   field
     .split("_")
-    .map((word) => capitalize(word))
+    .map(word => capitalize(word))
     .join(" ");
 
 const normalizeValue = (value: APIFiedlValueType) => {
@@ -39,11 +39,13 @@ const normalizeValue = (value: APIFiedlValueType) => {
 };
 
 const customNormalizerBasedOnPropertyKey: {
-  [index: string]: Function;
+  // @TODO: Think about a better way to type the custom normalizer for values
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [index: string]: (...args: any) => any;
 } = {
   speed: normalizeSpeed,
   actions: normalizeActions,
-  attribute: normalizeAttribute,
+  attribute: normalizeAttribute
 };
 
 export const normalizeKeyValuePair = (

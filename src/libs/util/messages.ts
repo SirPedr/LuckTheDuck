@@ -4,7 +4,7 @@ import {
   SEARCH_CATEGORY_REGEX,
   SEARCH_OPTIONS_REGEX,
   SEARCH_PROPERTIES_REGEX,
-  SEARCH_QUERY_REGEX,
+  SEARCH_QUERY_REGEX
 } from "../../config/regex";
 import { FieldsToDisplayBasedOnQueryType } from "../../consts/fieldsToDisplay";
 import { APIResponseType } from "../../types/api";
@@ -37,11 +37,13 @@ export const getParamsFromCommand = (
     properties: getSelectedProperties(messageContent),
     flags,
     query: { search: searchedText ? searchedText.join("+").toLowerCase() : "" },
-    category,
+    category
   };
 };
 
-export const createOptionsList = (options: string[]) => {
+export const createOptionsList = (
+  options: string[]
+): MessageEmbed | undefined => {
   if (options.length) {
     const optionsListMessage = new MessageEmbed();
 
@@ -64,14 +66,14 @@ export const formatDataIntoMessage = (
   category: Categories,
   selectedProperties: string[],
   externalUrl?: string
-) => {
+): MessageEmbed => {
   const { name, ...infoToBeDisplayed } = data;
   const fieldsToDisplay = FieldsToDisplayBasedOnQueryType[category];
 
   const formatedMessage = new MessageEmbed({
     title: name as string,
     color: getRandomColor(),
-    ...(externalUrl ? { url: externalUrl } : {}),
+    ...(externalUrl ? { url: externalUrl } : {})
   });
 
   const filteredInfo = Object.entries(infoToBeDisplayed).filter(([entryKey]) =>
@@ -89,17 +91,17 @@ export const formatDataIntoMessage = (
       fieldsToDisplay.indexOf(secondEntryKey)
   );
 
-  for (let [key, value] of entriesToDisplay) {
+  for (const [key, value] of entriesToDisplay) {
     const [normalizedField, normalizedValue] = normalizeKeyValuePair(
       key,
       value
     );
 
-    const shouldValueBeInline: boolean = !singleLineProperties.includes(key);
+    const shouldValueBeInline = !singleLineProperties.includes(key);
 
     if (isValueValid(normalizedValue)) {
       if (Array.isArray(normalizedValue)) {
-        for (let [title, description] of normalizedValue) {
+        for (const [title, description] of normalizedValue) {
           formatedMessage.addField(title, description, shouldValueBeInline);
         }
       } else {
@@ -118,5 +120,5 @@ export const formatDataIntoMessage = (
 const getSelectedProperties = (message: string) => {
   const properties = message.match(SEARCH_PROPERTIES_REGEX) || [];
 
-  return properties.map((prop) => prop.trim().replace(" ", "_").toLowerCase());
+  return properties.map(prop => prop.trim().replace(" ", "_").toLowerCase());
 };

@@ -24,7 +24,7 @@ export const FieldsToDisplayBasedOnQueryType: {
     "damage_vulnerabilities",
     "damage_resistances",
     "damage_immunities",
-    "actions",
+    "actions"
   ],
   spells: [
     "name",
@@ -39,6 +39,6 @@ export const FieldsToDisplayBasedOnQueryType: {
     "school",
     "dnd_class",
     "desc",
-    "higher_level",
-  ],
+    "higher_level"
+  ]
 };

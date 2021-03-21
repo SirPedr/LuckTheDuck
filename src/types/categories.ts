@@ -1,4 +1,4 @@
 export const enum Categories {
-    SPELLS = "spells",
-    MONSTERS = "monsters"
+  SPELLS = "spells",
+  MONSTERS = "monsters"
 }

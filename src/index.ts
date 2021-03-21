@@ -5,7 +5,7 @@ import { getFromAPI } from "./libs/api";
 import {
   createOptionsList,
   formatDataIntoMessage,
-  getParamsFromCommand,
+  getParamsFromCommand
 } from "./libs/util/messages";
 
 const client = new Client();
@@ -14,11 +14,10 @@ client.on("ready", () => {
   console.log("Luck the Duck is ready to roll!");
 });
 
-client.on("message", async (message) => {
+client.on("message", async message => {
   if (!message.author.bot && message.content.startsWith(BOT_PREFIX)) {
     const params = getParamsFromCommand(message.content);
 
-    console.log(params);
     const channel = params.flags?.private ? message.author : message.channel;
     const queryEndpoint = EndpointBasedOnCategory[params.category];
     const queryData = await getFromAPI(queryEndpoint, params.query);
@@ -27,7 +26,7 @@ client.on("message", async (message) => {
 
     if (queryData.length > 1) {
       formatedMessage = createOptionsList(
-        queryData.map((result) => result.name as string)
+        queryData.map(result => result.name as string)
       );
 
       const optionsMessage = await channel.send(formatedMessage);
@@ -42,7 +41,7 @@ client.on("message", async (message) => {
             parsedResponse <= queryData.length
           );
         }, AWAIT_MESSAGE_DEFAULT_OPTIONS)
-        .then((collectedAnswer) => {
+        .then(collectedAnswer => {
           const [{ content, channel }] = collectedAnswer.values();
           const selectedItemIndex = parseInt(content) - 1;
 
@@ -65,7 +64,7 @@ client.on("message", async (message) => {
       channel.send(formatedMessage);
     } else {
       formatedMessage = new MessageEmbed({
-        title: `Sorry, couldn't find an entry for ${params.query.search}.`,
+        title: `Sorry, couldn't find an entry for ${params.query.search}.`
       });
 
       channel.send(formatedMessage);
@@ -73,4 +72,4 @@ client.on("message", async (message) => {
   }
 });
 
-client.login("NzY2NjQyMDA3NDEzNjIwNzY4.X4mVAg.rycp-HS1Ees_b9gKiuBk8E7VE4U");
+client.login(process.env.BOT_TOKEN);

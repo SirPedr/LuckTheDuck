@@ -10,12 +10,12 @@ export type APIFiedlValueType =
   | null;
 
 export type ActionType = {
-    name: string;
-    desc: string;
-}
+  name: string;
+  desc: string;
+};
 
 export type SpeedType = {
   walk: string;
   fly?: string;
   swim?: string;
-}
+};
