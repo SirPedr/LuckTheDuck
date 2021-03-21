@@ -18,15 +18,16 @@ client.on("message", async (message) => {
   if (!message.author.bot && message.content.startsWith(BOT_PREFIX)) {
     const params = getParamsFromCommand(message.content);
 
-    const channel = params.isPrivate ? message.author : message.channel;
+    console.log(params);
+    const channel = params.flags?.private ? message.author : message.channel;
     const queryEndpoint = EndpointBasedOnCategory[params.category];
-    const queryData = await getFromAPI(queryEndpoint, params.options);
+    const queryData = await getFromAPI(queryEndpoint, params.query);
 
     let formatedMessage;
 
     if (queryData.length > 1) {
       formatedMessage = createOptionsList(
-        queryData.map((result) => result.name)
+        queryData.map((result) => result.name as string)
       );
 
       const optionsMessage = await channel.send(formatedMessage);
@@ -55,12 +56,16 @@ client.on("message", async (message) => {
           channel.send(message);
         });
     } else if (queryData.length === 1) {
-      formatedMessage = formatDataIntoMessage(queryData[0], params.category, params.properties);
+      formatedMessage = formatDataIntoMessage(
+        queryData[0],
+        params.category,
+        params.properties
+      );
 
       channel.send(formatedMessage);
     } else {
       formatedMessage = new MessageEmbed({
-        title: `Sorry, couldn't find an entry for ${params.options.search}.`,
+        title: `Sorry, couldn't find an entry for ${params.query.search}.`,
       });
 
       channel.send(formatedMessage);
@@ -68,4 +73,4 @@ client.on("message", async (message) => {
   }
 });
 
-client.login("NzY2NjQyMDA3NDEzNjIwNzY4.X4mVAg.H2eHo8FS8X_9Ly4V5tpQhdnQgjc");
+client.login("NzY2NjQyMDA3NDEzNjIwNzY4.X4mVAg.rycp-HS1Ees_b9gKiuBk8E7VE4U");

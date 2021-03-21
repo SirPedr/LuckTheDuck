@@ -1,5 +1,9 @@
+import { Categories } from "../types/categories";
+
 // Field will be displayed in the same order they appear in the array
-export const FieldsToDisplayBasedOnQueryType = {
+export const FieldsToDisplayBasedOnQueryType: {
+  [index in Categories]: string[];
+} = {
   monsters: [
     "name",
     "slug",

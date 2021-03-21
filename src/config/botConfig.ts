@@ -1,3 +1,5 @@
+import { AwaitMessagesOptions } from "discord.js";
+
 export const BOT_PREFIX = "!luck";
 
 export const singleLineProperties = [
@@ -7,7 +9,7 @@ export const singleLineProperties = [
   "damage_immunities",
   "actions",
   "desc",
-  "higher_level"
+  "higher_level",
 ];
 
 export const attributeSlugs = [
@@ -16,11 +18,11 @@ export const attributeSlugs = [
   "constitution",
   "intelligence",
   "wisdom",
-  "charisma"
+  "charisma",
 ];
 
-export const AWAIT_MESSAGE_DEFAULT_OPTIONS = {
+export const AWAIT_MESSAGE_DEFAULT_OPTIONS: AwaitMessagesOptions = {
   max: 1,
   time: 60000,
-  errors: ["time"]
+  errors: ["time"],
 };
