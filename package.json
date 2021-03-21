@@ -20,6 +20,6 @@
   },
   "scripts": {
     "start-dev": "tsc --watch",
-    "start": "node -r dotenv/config -r esm src/index.js"
+    "start": "node -r dotenv/config dist/index.js"
   }
 }
