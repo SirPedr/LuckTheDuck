@@ -16,10 +16,10 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "nodemon": "^2.0.3"
+    "typescript": "^4.2.3"
   },
   "scripts": {
-    "start-dev": "nodemon -r dotenv/config -r esm src/index.js",
+    "start-dev": "tsc --watch",
     "start": "node -r dotenv/config -r esm src/index.js"
   }
 }
