@@ -1,1 +1,1 @@
-worker: node -r dotenv/config -r esm src/index.js
+worker: yarn tsc && yarn start
